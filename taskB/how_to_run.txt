@@ -1,0 +1,9 @@
+1. data folder contains all the comma separated datasets.
+2. Execute scripts in following order:
+	a. db2 -td@ -f /home/db2inst1/project2/load_titanic.sql
+	b. db2 -td@ -f /home/db2inst1/project2/partition_titanic.sql 
+	c. db2 -td@ -f /home/db2inst1/project2/oner.sql
+	d. db2 -td@ -f /home/db2inst1/project2/naive_bayes.sql 
+	e. db2 -td@ -f /home/db2inst1/project2/naive_test.sql 
+3. load and partition scripts are different for different datasets. The other files are common to all. oner performs the 1R classification. naive_bayes performs the training and naive_test performs testing.
+4. Boosting scripts are boost.sql and boosting.sql. Execute boost after load and partition and then the classifiers after boosting.
