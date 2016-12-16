@@ -1,0 +1,22 @@
+%rules
+bestrule(Col,Val,Class,count<Id>) <- patterns(Id,Col,Val),labels(Id,Class).
+maxclass(Col,Val,C) <- bestrule(Col,Val,yes,Y),bestrule(Col,Val,no,N),if(Y>=N then C=yes else C=no).
+
+accuracycnt(Col,Val,C,count<Id>) <- maxclass(Col,Val,C),patterns(Id,Col,Val),labels(Id,Class),C = Class.
+
+accuracy(Column,sum<A>) <- accuracycnt(Column,Value,Class,A).
+
+%maxacc selects maximum accuracy
+%maxcolumn returns column with maximum accuracy
+maxacc(max<A>) <- accuracy(Column,A).
+maxcolumn(Column) <- maxacc(X),accuracy(Column,A),A=X.
+query maxcolumn(Y).
+
+%this function performs actual 1R classification
+oner(Id,C)<-testdata(Id,Col,Val),maxcolumn(Column),Col=Column,maxclass(Column,Val,C).
+
+%finally accuracy is ratio of correctly classified instances to total instances
+correct(countd<Id>)<-testlabels(Id,L),oner(Id,C),L=C.
+total(count<A>) <- testlabels(X,A).
+fin_accuracy(Z) <- correct(X),total(Y),Z=(X/Y)*100.
+query fin_accuracy(Z).

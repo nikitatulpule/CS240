@@ -1,0 +1,5 @@
+1. Execute convert.sh
+	eg. bash convert.sh data_titanic.data proj.deal 3
+	Here, data file is space separated, proj.deal is for NBC while proj2.deal is for 1R and 3 stands for number of columns.
+2. Execute trial.deal file to run actual classifier
+	eg bash runfile trial.deal

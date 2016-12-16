@@ -1,0 +1,21 @@
+%rules
+
+query getcnt(X,No).
+getcnt(X,count<A>) <- labels(A,X).
+gettotal(count<A>) <- labels(X,A).
+getclasprob(X,C) <- getcnt(C,No),gettotal(Y),X=No/Y.
+
+%getelementprobability gives probability for each element per class
+getelement(A,D,C,count<No>) <- patterns(No,A,D),labels(No,C).
+getelementprobability(Col,A,B,P) <- getelement(Col,A,B,X),getcnt(B,Y),P=X/Y.
+
+%mul_prob_data calculates the actual bayes function with sum of logs
+mul_prob(Id,C,sum<S>) <- testdata(Id,Col,Val),getelementprobability(Col,Val,C,P),S=log P.
+mul_prob_data(Id,C,P) <- mul_prob(Id,C,P1),getclasprob(P2,C),P=P1+log P2.
+finalprob(Id,C) <- mul_prob_data(Id,yes,Y),mul_prob_data(Id,no,N),if(Y>N then C=yes else C=no).
+
+%accuracy is ratio of correctly classified instances to total instances
+correct(count<Id>)<-testlabels(Id,L),finalprob(Id,C),L=C.
+total(count<A>) <- testlabels(X,A).
+accuracy(Z) <- correct(X),total(Y),Z=(X/Y)*100.
+query accuracy(Z).
